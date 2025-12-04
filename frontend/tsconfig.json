@@ -5,11 +5,16 @@
         "jsx": "react-jsx",
         "module": "ESNext",
         "moduleResolution": "bundler",
+        "types": ["node"],
         "strict": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "esModuleInterop": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        }
     },
     "include": ["src", "vite.config.ts"]
 }
