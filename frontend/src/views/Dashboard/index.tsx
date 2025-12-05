@@ -1,5 +1,7 @@
+import DashboardLayout from "@/views/DashboardLayout";
+
 const Dashboard: React.FC = () => {
-    return <div>Dashboard</div>;
+    return <DashboardLayout />;
 };
 
 export default Dashboard;
