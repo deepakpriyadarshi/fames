@@ -21,6 +21,7 @@ export interface IUpdateUserData
 export interface IUserModel {
     createUser: (user: ICreateUserData) => Promise<IUser | null>;
     findByUserId: (userId: IUser["userId"]) => Promise<IUser | null>;
+    findByEmail: (email: IUser["email"]) => Promise<IUser | null>;
     updateByUserId: (
         userId: IUser["userId"],
         updatedUserData: IUpdateUserData

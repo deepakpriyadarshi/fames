@@ -1,3 +1,11 @@
+import dotenv from "dotenv";
+import path from "path";
+
+// Load environment variables from backend/.env
+// From src/config, go up two levels to reach backend root
+const envPath = path.resolve(__dirname, "../../.env");
+dotenv.config({ path: envPath });
+
 import { type IConfig } from "./config";
 
 const config: IConfig = {
@@ -15,9 +23,9 @@ const config: IConfig = {
 
     DB_HOST: process.env.DB_HOST || "",
     DB_PORT: Number(process.env.DB_PORT) || 5432,
-    DB_USER: process.env.DB_USER || "",
-    DB_PASSWORD: process.env.DB_PASSWORD || "",
-    DB_DATABASE: process.env.DB_DATABASE || "",
+    DB_USER: process.env.POSTGRES_USER || "",
+    DB_PASSWORD: process.env.POSTGRES_PASSWORD || "",
+    DB_DATABASE: process.env.POSTGRES_DB || "",
 };
 
 export default config;
