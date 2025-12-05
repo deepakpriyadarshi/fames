@@ -1,0 +1,7 @@
+{
+    "migrationsTable": "pgmigrations",
+    "migrationsDirectory": "./migrations",
+    "schema": "public",
+    "tsconfig": "./tsconfig.json",
+    "ignore": ["README.md", "*.md"]
+}
