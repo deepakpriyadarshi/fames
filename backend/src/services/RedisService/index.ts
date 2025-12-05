@@ -2,7 +2,7 @@ import redis, { type SetOptions } from "redis";
 
 import config from "@/config";
 import { consoleLogger } from "@/utils";
-import { IRedisService } from "./services";
+import { IRedisService } from "../services";
 
 const REDIS = redis.createClient({
     url: `redis://${config.REDIS_HOST}:${config.REDIS_PORT}`,
