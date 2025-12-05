@@ -14,6 +14,19 @@ const AuthController: IAuthController = {
         try {
             const { firstName, lastName, email, password } = req.body;
 
+            if (!firstName || !lastName || !email || !password) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Required fields are missing",
+                    requiredFields: [
+                        "firstName",
+                        "lastName",
+                        "email",
+                        "password",
+                    ],
+                });
+            }
+
             const User = new UserModel();
 
             const userExists = await User.findByEmail(email);
@@ -68,6 +81,14 @@ const AuthController: IAuthController = {
     login: async (req: Request, res: Response) => {
         try {
             const { email, password } = req.body;
+
+            if (!email || !password) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Required fields are missing",
+                    requiredFields: ["email", "password"],
+                });
+            }
 
             const User = new UserModel();
 

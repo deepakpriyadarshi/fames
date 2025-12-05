@@ -17,17 +17,15 @@ const verifyUserToken = (
         const token = authorizationHeader.slice(7);
 
         verify(token, config.JSON_WEBTOKEN_SECRET, async (error, tokenData) => {
-            const { userId } = tokenData as IJWTTokenData;
-
-            if (error) {
-                await RedisService.deleteKey(`user-${userId}-session`);
-
+            if (error || !tokenData) {
                 return response.status(500).json({
                     status: "error",
                     message: "Invalid Authorization Token",
                     error,
                 });
             }
+
+            const { userId } = tokenData as IJWTTokenData;
 
             const cachedUserSession = await RedisService.getKey(
                 `user-${userId}-session`
