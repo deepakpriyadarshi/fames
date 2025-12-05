@@ -6,8 +6,10 @@ import UserModel from "@/models/User";
 import { consoleLogger } from "@/utils";
 import { sign } from "jsonwebtoken";
 import config from "@/config";
+import { IAuthController } from "./controllers";
+import { IRequest } from "@/middlewares/middlewares";
 
-const AuthController = {
+const AuthController: IAuthController = {
     register: async (req: Request, res: Response) => {
         try {
             const { firstName, lastName, email, password } = req.body;
@@ -105,6 +107,31 @@ const AuthController = {
             });
         } catch (error) {
             consoleLogger("Error logging in user", error);
+            return res.status(500).json({
+                status: "error",
+                message: "Something went wrong, please try again later",
+            });
+        }
+    },
+
+    session: async (req: IRequest, res: Response) => {
+        try {
+            const { currentUser } = req;
+
+            if (!currentUser) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "User not found",
+                });
+            }
+
+            return res.status(200).json({
+                status: "success",
+                message: "Session retrieved successfully",
+                data: currentUser,
+            });
+        } catch (error) {
+            consoleLogger("Error getting session", error);
             return res.status(500).json({
                 status: "error",
                 message: "Something went wrong, please try again later",

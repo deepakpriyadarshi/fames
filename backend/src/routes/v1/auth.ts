@@ -3,11 +3,15 @@ import { Router } from "express";
 const authRouter = Router();
 
 import AuthController from "@/controllers/Auth";
+import verifyUserToken from "@/middlewares/auth";
 
-// /v1/auth/register
+// POST /v1/auth/register
 authRouter.post("/register", AuthController.register);
 
-// /v1/auth/login
+// POST /v1/auth/login
 authRouter.post("/login", AuthController.login);
+
+// GET /v1/auth/session
+authRouter.get("/session", verifyUserToken, AuthController.session);
 
 export default authRouter;
