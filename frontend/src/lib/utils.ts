@@ -48,6 +48,6 @@ export const formatFileType = (mimeType: string) => {
     const typeParts = mimeType.split("/");
 
     return typeParts.length > 1
-        ? typeParts[1].toUpperCase()
+        ? typeParts[0].toUpperCase()
         : mimeType.toUpperCase();
 };

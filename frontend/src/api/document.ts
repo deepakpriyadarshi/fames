@@ -3,10 +3,8 @@ import EKLINE_API, { EKLINE_PUBLIC_API } from "@/api/index";
 import API_ROUTES from "@/constants/apiRoutes";
 
 interface ICreateDocumentParams {
-    file: string;
-    lastName?: string;
-    email: string;
-    password: string;
+    name: string;
+    file: File;
 }
 
 interface IGetDocumentDetailsParams {
@@ -23,13 +21,14 @@ interface IDeleteDocumentParams {
 }
 
 const create = async (params: ICreateDocumentParams) => {
-    const { file, ...otherParams } = params;
+    const { file, name } = params;
 
     if (!file) return;
 
     const formData = new FormData();
 
     formData.append("file", file);
+    formData.append("name", name);
 
     return EKLINE_API.post(API_ROUTES.CREATE_DOCUMENT, formData);
 };

@@ -28,7 +28,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     </div>
                 </header>
 
-                <div className="flex flex-1 flex-col gap-5 p-5">{children}</div>
+                <div className="flex flex-1 flex-col gap-5 px-10 py-5">
+                    {children}
+                </div>
             </SidebarInset>
         </SidebarProvider>
     );

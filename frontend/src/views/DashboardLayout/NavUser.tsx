@@ -30,7 +30,7 @@ import { getUserInitials } from "@/lib/utils";
 
 const NavUser = ({}) => {
     const { isMobile } = useSidebar();
-    const { user } = useUser();
+    const { user, clearUser } = useUser();
 
     return (
         <SidebarMenu>
@@ -127,7 +127,7 @@ const NavUser = ({}) => {
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={clearUser}>
                             <LogOut />
                             Log out
                         </DropdownMenuItem>

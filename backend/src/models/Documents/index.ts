@@ -44,7 +44,8 @@ class Documents implements IDocumentModel {
 
     async findByUserId(userId: IDocument["userId"]) {
         try {
-            const query = "SELECT * FROM documents WHERE user_id = $1";
+            const query =
+                "SELECT * FROM documents WHERE user_id = $1 ORDER BY created_at DESC";
 
             const { rows } = await postgresSQLConn.query(query, [userId]);
 

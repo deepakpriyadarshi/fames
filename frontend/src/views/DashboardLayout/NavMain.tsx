@@ -19,22 +19,23 @@ import {
 } from "@/components/ui/sidebar";
 
 import { INavBarData } from "./dashboard-layout";
+import APP_ROUTES from "@/constants/appRoutes";
 
 const NavMain: React.FC = () => {
     const navData: INavBarData[] = [
         {
             title: "Documents",
-            url: "#",
+            url: APP_ROUTES.DOCUMENTS,
             icon: BookOpen,
             isActive: true,
             items: [
                 {
                     title: "All",
-                    url: "#",
+                    url: APP_ROUTES.DOCUMENTS,
                 },
                 {
                     title: "Archived",
-                    url: "#",
+                    url: APP_ROUTES.DOCUMENTS,
                 },
             ],
         },

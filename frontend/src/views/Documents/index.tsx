@@ -13,8 +13,10 @@ import {
 import { useEffect, useState } from "react";
 import { IDocument } from "./documents";
 import EKLINE_DOCUMENT_API from "@/api/document";
-import { ScanSearch, SquareArrowOutUpRight } from "lucide-react";
+import { FileUp, ScanSearch, SquareArrowOutUpRight } from "lucide-react";
 import { formatFileSize, formatFileType } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import NewDocument from "./NewDocument";
 
 const Documents: React.FC = () => {
     const invoices = [
@@ -63,6 +65,7 @@ const Documents: React.FC = () => {
     ];
 
     const [documents, setDocuments] = useState<IDocument[]>([]);
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchDocuments = async () => {
@@ -79,10 +82,28 @@ const Documents: React.FC = () => {
         };
 
         fetchDocuments();
-    }, []);
+    }, [isDialogOpen]);
 
     return (
         <DashboardLayout>
+            <div className="flex items-center justify-between mb-6">
+                <div>
+                    <h1 className="text-2xl font-bold mb-4">Documents</h1>
+                    <p className="text-gray-600 mb-6">
+                        Manage and view your documents below.
+                    </p>
+                </div>
+                <div>
+                    <Button
+                        variant="default"
+                        className="mb-4"
+                        onClick={() => setIsDialogOpen(true)}
+                    >
+                        <FileUp className="inline-block w-5" /> New Document
+                    </Button>
+                </div>
+            </div>
+
             <Table>
                 <TableHeader className="bg-gray-800">
                     <TableRow>
@@ -132,6 +153,11 @@ const Documents: React.FC = () => {
                     ))}
                 </TableBody>
             </Table>
+
+            <NewDocument
+                isDialogOpen={isDialogOpen}
+                setIsDialogOpen={setIsDialogOpen}
+            />
         </DashboardLayout>
     );
 };
