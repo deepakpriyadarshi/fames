@@ -15,10 +15,14 @@ authRouter.post(
 );
 
 // GET /v1/documents
-authRouter.get("/", verifyUserToken);
+authRouter.get("/", verifyUserToken, DocumentsController.getDocuments);
 
 // GET /v1/documents/:documentId
-authRouter.get("/:documentId", verifyUserToken);
+authRouter.get(
+    "/:documentId",
+    verifyUserToken,
+    DocumentsController.getDocumentDetails
+);
 
 // PATCH /v1/documents/:documentId
 authRouter.post("/:documentId", verifyUserToken);

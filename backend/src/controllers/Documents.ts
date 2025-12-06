@@ -58,8 +58,6 @@ const DocumentsController: IDocumentsController = {
                 });
             }
 
-            const { Location, Key } = storedFile;
-
             const Documents = new DocumentsModel();
 
             const newDocument = await Documents.createDocument({
@@ -90,6 +88,82 @@ const DocumentsController: IDocumentsController = {
             });
         } catch (error) {
             consoleLogger("Error in createDocument controller", error);
+
+            return res.status(500).json({
+                status: "error",
+                message: "Something went wrong, please try again later",
+            });
+        }
+    },
+    getDocuments: async (req: IRequest, res: Response) => {
+        try {
+            const { currentUser } = req;
+
+            const Documents = new DocumentsModel();
+
+            const documents = await Documents.findByUserId(currentUser.userId);
+
+            const documentsWithSignedURLs = await Promise.all(
+                documents.map(async (doc) => ({
+                    ...doc,
+                    signedFilePath: await StorageService.getSignedURL(
+                        doc.filePath
+                    ),
+                }))
+            );
+
+            return res.status(200).json({
+                status: "success",
+                message: "Documents fetched successfully",
+                data: documentsWithSignedURLs,
+            });
+        } catch (error) {
+            consoleLogger("Error in getDocuments controller", error);
+
+            return res.status(500).json({
+                status: "error",
+                message: "Something went wrong, please try again later",
+            });
+        }
+    },
+    getDocumentDetails: async (req: IRequest, res: Response) => {
+        try {
+            const { documentId } = req.params;
+            const { currentUser } = req;
+
+            const Documents = new DocumentsModel();
+
+            const document = await Documents.findByDocumentId(documentId);
+
+            if (!document) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Document not found",
+                });
+            }
+
+            if (document?.userId !== currentUser.userId) {
+                return res.status(403).json({
+                    status: "error",
+                    message:
+                        "You do not have permission to access this document",
+                });
+            }
+
+            const documentWithSignedURL = {
+                ...document,
+                signedFilePath: await StorageService.getSignedURL(
+                    document.filePath
+                ),
+            };
+
+            return res.status(200).json({
+                status: "success",
+                message: "Document details fetched successfully",
+                data: documentWithSignedURL,
+            });
+        } catch (error) {
+            consoleLogger("Error in getDocumentDetails controller", error);
 
             return res.status(500).json({
                 status: "error",
