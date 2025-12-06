@@ -7,7 +7,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import AppSidebar from "./AppSidebar";
-import { UserProvider } from "@/hooks/useUser";
+import useUser from "@/hooks/useUser";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import APP_ROUTES from "@/constants/appRoutes";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
@@ -24,11 +27,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         />
                     </div>
                 </header>
-                <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-                    <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                        {children}
-                    </div>
-                </div>
+
+                <div className="flex flex-1 flex-col gap-5 p-5">{children}</div>
             </SidebarInset>
         </SidebarProvider>
     );
@@ -37,11 +37,16 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    return (
-        <UserProvider>
-            <Layout>{children}</Layout>
-        </UserProvider>
-    );
+    const navigate = useNavigate();
+    const { user } = useUser();
+
+    useEffect(() => {
+        if (!user?.token) {
+            navigate(APP_ROUTES.LOGIN, { replace: true });
+        }
+    }, [user]);
+
+    return <Layout>{children}</Layout>;
 };
 
 export default DashboardLayout;

@@ -1,8 +1,9 @@
 export type IUser = {
-    userId?: string;
+    userId: string;
     firstName: string;
     lastName: string;
     email: string;
     createdAt: Date;
     updatedAt: Date;
+    token: string | null;
 };

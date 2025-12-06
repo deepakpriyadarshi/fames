@@ -25,7 +25,8 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
-import { useUser } from "@/hooks/useUser";
+import useUser from "@/hooks/useUser";
+import { getUserInitials } from "@/lib/utils";
 
 const NavUser = ({}) => {
     const { isMobile } = useSidebar();
@@ -48,9 +49,11 @@ const NavUser = ({}) => {
                                     }`}
                                 />
                                 <AvatarFallback className="rounded-lg">
-                                    {`${user?.firstName.charAt(0) || ""} ${
-                                        user?.lastName.charAt(0) || ""
-                                    }`}
+                                    {getUserInitials(
+                                        `${user?.firstName || ""} ${
+                                            user?.lastName || ""
+                                        }`
+                                    )}
                                 </AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
@@ -82,9 +85,11 @@ const NavUser = ({}) => {
                                         }`}
                                     />
                                     <AvatarFallback className="rounded-lg">
-                                        {`${user?.firstName.charAt(0) || ""} ${
-                                            user?.lastName.charAt(0) || ""
-                                        }`}
+                                        {getUserInitials(
+                                            `${user?.firstName || ""} ${
+                                                user?.lastName || ""
+                                            }`
+                                        )}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="grid flex-1 text-left text-sm leading-tight">

@@ -1,44 +1,70 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import { type IUser } from "./hooks";
+import { useEffect } from "react";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-const UserContext = createContext({
-    user: null as IUser | null,
-    setUser: (user: IUser) => {},
-});
+import { getUserTokenFromLocalStorage } from "@/lib/utils";
+import EKLINE_AUTH_API from "@/api/auth";
+import APP_ROUTES from "@/constants/appRoutes";
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<IUser | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<Error | null>(null);
+import { IUser } from "./hooks";
+
+interface IUserStore {
+    user: IUser;
+    setUser: (user: IUser) => void;
+    clearUser: () => void;
+}
+
+const useUserStore = create<IUserStore>()(
+    persist(
+        (set) => ({
+            user: { token: null } as IUser,
+            setUser: (user) => set({ user }),
+            clearUser: () => {
+                set({ user: { token: null } as IUser });
+
+                window.location.replace(APP_ROUTES.LOGIN);
+            },
+        }),
+        {
+            name: "ekline-user",
+        }
+    )
+);
+
+const useUser = () => {
+    const { user, setUser, clearUser } = useUserStore();
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const token = getUserTokenFromLocalStorage();
+
+        const fetchUserSession = async () => {
+            if (!token) {
+                return;
+            }
+
             try {
-                const response = await fetch("/api/user");
-                const data = await response.json();
-                setUser(data);
-                setLoading(false);
-            } catch (error: any) {
-                setError(error);
-                setLoading(false);
+                const { data: mySessionResponse } =
+                    await EKLINE_AUTH_API.getSession();
+
+                if (mySessionResponse.status === "success") {
+                    const userData = {
+                        ...user,
+                        ...mySessionResponse.data,
+                    };
+
+                    setUser(userData);
+                }
+            } catch (error) {
+                console.log("Error fetching user session:", error);
+
+                clearUser();
             }
         };
-        fetchUser();
+
+        fetchUserSession();
     }, []);
 
-    return (
-        <UserContext.Provider value={{ user, setUser }}>
-            {children}
-        </UserContext.Provider>
-    );
+    return { user, setUser, clearUser };
 };
 
-export const useUser = () => {
-    const context = useContext(UserContext);
-
-    if (!context) {
-        throw new Error("useUser must be used within a UserProvider");
-    }
-
-    return context;
-};
+export default useUser;
