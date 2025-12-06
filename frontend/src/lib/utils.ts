@@ -29,3 +29,25 @@ export const getUserInitials = (name: string) => {
 
     return initials;
 };
+
+export const formatFileSize = (sizeInBytes: number) => {
+    if (sizeInBytes < 1024) {
+        return `${sizeInBytes} B`;
+    } else if (sizeInBytes < 1048576) {
+        return `${(sizeInBytes / 1024).toFixed(2)} KB`;
+    } else if (sizeInBytes < 1073741824) {
+        return `${(sizeInBytes / 1048576).toFixed(2)} MB`;
+    } else if (sizeInBytes < 1099511627776) {
+        return `${(sizeInBytes / 1073741824).toFixed(2)} GB`;
+    } else {
+        return `${(sizeInBytes / 1099511627776).toFixed(2)} TB`;
+    }
+};
+
+export const formatFileType = (mimeType: string) => {
+    const typeParts = mimeType.split("/");
+
+    return typeParts.length > 1
+        ? typeParts[1].toUpperCase()
+        : mimeType.toUpperCase();
+};
