@@ -12,5 +12,5 @@ export interface IDocumentsController {
     getDocuments: (req: Request, res: Response) => Promise<Response>;
     getDocumentDetails: (req: Request, res: Response) => Promise<Response>;
     // updateDocument: (req: Request, res: Response) => Promise<Response>;
-    // deleteDocument: (req: Request, res: Response) => Promise<Response>;
+    deleteDocument: (req: Request, res: Response) => Promise<Response>;
 }

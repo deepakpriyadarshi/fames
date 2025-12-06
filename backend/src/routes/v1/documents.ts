@@ -28,6 +28,10 @@ authRouter.get(
 authRouter.post("/:documentId", verifyUserToken);
 
 // DELETE /v1/documents/:documentId
-authRouter.delete("/:documentId", verifyUserToken);
+authRouter.delete(
+    "/:documentId",
+    verifyUserToken,
+    DocumentsController.deleteDocument
+);
 
 export default authRouter;

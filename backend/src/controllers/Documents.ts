@@ -171,6 +171,54 @@ const DocumentsController: IDocumentsController = {
             });
         }
     },
+    deleteDocument: async (req: IRequest, res: Response) => {
+        try {
+            const { documentId } = req.params;
+            const { currentUser } = req;
+
+            const Documents = new DocumentsModel();
+
+            const document = await Documents.findByDocumentId(documentId);
+
+            if (!document) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Document not found",
+                });
+            }
+
+            if (document?.userId !== currentUser.userId) {
+                return res.status(403).json({
+                    status: "error",
+                    message:
+                        "You do not have permission to delete this document",
+                });
+            }
+
+            const documentDeleted = await Documents.deleteByDocumentId(
+                documentId
+            );
+
+            if (!documentDeleted) {
+                return res.status(500).json({
+                    status: "error",
+                    message: "Failed to delete document",
+                });
+            }
+
+            return res.status(200).json({
+                status: "success",
+                message: "Document deleted successfully",
+            });
+        } catch (error) {
+            consoleLogger("Error in deleteDocument controller", error);
+
+            return res.status(500).json({
+                status: "error",
+                message: "Something went wrong, please try again later",
+            });
+        }
+    },
 };
 
 export default DocumentsController;
