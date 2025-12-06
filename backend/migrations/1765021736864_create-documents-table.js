@@ -20,6 +20,10 @@ export const up = (pgm) => {
         },
         name: { type: "varchar(255)", notNull: true },
         original_name: { type: "varchar(255)", notNull: true },
+        user_id: { type: "uuid", notNull: true, references: "users(user_id)" },
+        file_path: { type: "text", notNull: true },
+        file_size: { type: "bigint", notNull: true },
+        mime_type: { type: "varchar(100)", notNull: true },
         created_at: {
             type: "timestamp",
             notNull: true,
@@ -34,6 +38,7 @@ export const up = (pgm) => {
 
     pgm.createIndex("documents", "document_id");
     pgm.createIndex("documents", "name");
+    pgm.createIndex("documents", "user_id");
 };
 
 /**
