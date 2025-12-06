@@ -171,6 +171,78 @@ const DocumentsController: IDocumentsController = {
             });
         }
     },
+    updateDocument: async (req: IRequest, res: Response) => {
+        try {
+            const { documentId } = req.params;
+            const { currentUser } = req;
+
+            const updateData = req.body;
+
+            if (Object.keys(updateData).length === 0) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "No data provided for update",
+                });
+            }
+
+            const allowedUpdateFields = ["name"];
+
+            const isValidUpdateData = Object.keys(updateData).every((key) =>
+                allowedUpdateFields.includes(key)
+            );
+
+            if (!isValidUpdateData) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Invalid fields in update data",
+                    allowedFields: allowedUpdateFields,
+                });
+            }
+
+            const Documents = new DocumentsModel();
+
+            const document = await Documents.findByDocumentId(documentId);
+
+            if (!document) {
+                return res.status(404).json({
+                    status: "error",
+                    message: "Document not found",
+                });
+            }
+
+            if (document?.userId !== currentUser.userId) {
+                return res.status(403).json({
+                    status: "error",
+                    message:
+                        "You do not have permission to update this document",
+                });
+            }
+
+            const updatedDocument = await Documents.updateByDocumentId(
+                documentId,
+                updateData
+            );
+
+            if (!updatedDocument) {
+                return res.status(500).json({
+                    status: "error",
+                    message: "Failed to update document",
+                });
+            }
+
+            return res.status(200).json({
+                status: "success",
+                message: "Document updated successfully",
+            });
+        } catch (error) {
+            consoleLogger("Error in updateDocument controller", error);
+
+            return res.status(500).json({
+                status: "error",
+                message: "Something went wrong, please try again later",
+            });
+        }
+    },
     deleteDocument: async (req: IRequest, res: Response) => {
         try {
             const { documentId } = req.params;

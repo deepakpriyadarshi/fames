@@ -25,7 +25,11 @@ authRouter.get(
 );
 
 // PATCH /v1/documents/:documentId
-authRouter.post("/:documentId", verifyUserToken);
+authRouter.patch(
+    "/:documentId",
+    verifyUserToken,
+    DocumentsController.updateDocument
+);
 
 // DELETE /v1/documents/:documentId
 authRouter.delete(
