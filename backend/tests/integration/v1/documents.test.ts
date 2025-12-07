@@ -66,8 +66,10 @@ describe("Documents API Integration Tests", () => {
     const mockedQuery = postgresSQLConn.query as jest.MockedFunction<any>;
     const mockedRedisGetKey = RedisService.getKey as jest.MockedFunction<any>;
     const mockedRedisSetKey = RedisService.setKey as jest.MockedFunction<any>;
-    const mockedStorageUpload = StorageService.upload as jest.MockedFunction<any>;
-    const mockedGetSignedURL = StorageService.getSignedURL as jest.MockedFunction<any>;
+    const mockedStorageUpload =
+        StorageService.upload as jest.MockedFunction<any>;
+    const mockedGetSignedURL =
+        StorageService.getSignedURL as jest.MockedFunction<any>;
 
     const testUserId = "123e4567-e89b-12d3-a456-426614174000";
     const testUser = {
@@ -154,7 +156,10 @@ describe("Documents API Integration Tests", () => {
             expect(response.body.status).toBe("success");
             expect(response.body.message).toBe("Document created successfully");
             expect(response.body.data).toHaveProperty("documentId");
-            expect(response.body.data).toHaveProperty("name", "test-document.txt");
+            expect(response.body.data).toHaveProperty(
+                "name",
+                "test-document.txt"
+            );
             expect(response.body.data).toHaveProperty("signedFilePath");
         });
 
@@ -255,7 +260,9 @@ describe("Documents API Integration Tests", () => {
                 .expect(200);
 
             expect(response.body.status).toBe("success");
-            expect(response.body.message).toBe("Documents fetched successfully");
+            expect(response.body.message).toBe(
+                "Documents fetched successfully"
+            );
             expect(response.body.data).toHaveLength(2);
             expect(response.body.data[0]).toHaveProperty("signedFilePath");
         });
@@ -452,14 +459,13 @@ describe("Documents API Integration Tests", () => {
             const token = getAuthToken();
 
             mockedRedisGetKey.mockResolvedValueOnce(null);
-            mockedQuery
-                .mockResolvedValueOnce({
-                    rows: [testUser],
-                    rowCount: 1,
-                    command: "SELECT",
-                    oid: 0,
-                    fields: [],
-                });
+            mockedQuery.mockResolvedValueOnce({
+                rows: [testUser],
+                rowCount: 1,
+                command: "SELECT",
+                oid: 0,
+                fields: [],
+            });
             mockedRedisSetKey.mockResolvedValueOnce("OK");
 
             const response = await request(app)
@@ -476,14 +482,13 @@ describe("Documents API Integration Tests", () => {
             const token = getAuthToken();
 
             mockedRedisGetKey.mockResolvedValueOnce(null);
-            mockedQuery
-                .mockResolvedValueOnce({
-                    rows: [testUser],
-                    rowCount: 1,
-                    command: "SELECT",
-                    oid: 0,
-                    fields: [],
-                });
+            mockedQuery.mockResolvedValueOnce({
+                rows: [testUser],
+                rowCount: 1,
+                command: "SELECT",
+                oid: 0,
+                fields: [],
+            });
             mockedRedisSetKey.mockResolvedValueOnce("OK");
 
             const response = await request(app)
@@ -707,4 +712,3 @@ describe("Documents API Integration Tests", () => {
         });
     });
 });
-

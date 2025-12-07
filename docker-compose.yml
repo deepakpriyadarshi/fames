@@ -1,4 +1,22 @@
 services:
+    ekline-migrations:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        container_name: ekline-migrations
+        env_file:
+            - ./backend/.env
+        command: sh -c "node scripts/wait-for-db.js && npm run migrate:up"
+        depends_on:
+            ekline-db:
+                condition: service_healthy
+        networks:
+            - ekline-network
+        volumes:
+            - ./backend:/app
+            - /app/node_modules
+        restart: "no"
+
     ekline-backend:
         build:
             context: ./backend
@@ -11,6 +29,7 @@ services:
         depends_on:
             - ekline-db
             - ekline-redis
+            - ekline-migrations
         networks:
             - ekline-network
         volumes:
@@ -46,6 +65,11 @@ services:
             - ekline_postgres_data:/var/lib/postgresql/data
         networks:
             - ekline-network
+        healthcheck:
+            test: ["CMD-SHELL", "pgrep postgres || exit 1"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
 
     ekline-redis:
         image: redis:7-alpine
