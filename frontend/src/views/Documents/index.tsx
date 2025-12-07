@@ -23,16 +23,7 @@ import { formatFileSize, formatFileType } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import NewDocument from "./NewDocument";
 import PreviewDocument from "./PreviewDocument";
-import { toast } from "sonner";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
+import DeleteDocument from "./DeleteDocument";
 
 const Documents: React.FC = () => {
     const [documents, setDocuments] = useState<IDocument[]>([]);
@@ -100,34 +91,10 @@ const Documents: React.FC = () => {
         setIsDeleteDialogOpen(true);
     };
 
-    const handleConfirmDelete = async () => {
-        if (!documentToDelete) return;
-
-        try {
-            const { data: deleteResponse } =
-                await EKLINE_DOCUMENT_API.deleteDocument({
-                    documentId: documentToDelete.documentId,
-                });
-
-            if (deleteResponse.status === "success") {
-                toast.success("Document deleted successfully", {
-                    duration: 3000,
-                    position: "bottom-center",
-                });
-
-                setIsDeleteDialogOpen(false);
-                setDocumentToDelete(null);
-            }
-        } catch (error: any) {
-            console.error("Error deleting document:", error);
-
-            const message =
-                error?.response?.data?.message || "Something went wrong";
-
-            toast.error(message, {
-                duration: 3000,
-                position: "top-center",
-            });
+    const handleDeleteDialogChange = (open: boolean) => {
+        setIsDeleteDialogOpen(open);
+        if (!open) {
+            setDocumentToDelete(null);
         }
     };
 
@@ -225,38 +192,11 @@ const Documents: React.FC = () => {
                 setIsDialogOpen={setIsDialogOpen}
             />
 
-            <Dialog
-                open={isDeleteDialogOpen}
-                onOpenChange={setIsDeleteDialogOpen}
-            >
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Delete Document</DialogTitle>
-                        <DialogDescription>
-                            <div className="text-center py-10 text-lg">
-                                Are you sure you want to delete?
-                                <br />
-                                <span className="font-bold">
-                                    {documentToDelete?.documentName}
-                                </span>
-                                <br />
-                                This action cannot be undone.
-                            </div>
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button variant="outline">Cancel</Button>
-                        </DialogClose>
-                        <Button
-                            variant="destructive"
-                            onClick={handleConfirmDelete}
-                        >
-                            Delete
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+            <DeleteDocument
+                isDeleteDialogOpen={isDeleteDialogOpen}
+                setIsDeleteDialogOpen={handleDeleteDialogChange}
+                documentToDelete={documentToDelete}
+            />
 
             <PreviewDocument
                 isPreviewOpen={isPreviewOpen}
