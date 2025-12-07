@@ -22,6 +22,7 @@ import {
 import { formatFileSize, formatFileType } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import NewDocument from "./NewDocument";
+import PreviewDocument from "./PreviewDocument";
 import { toast } from "sonner";
 import {
     Dialog,
@@ -42,6 +43,10 @@ const Documents: React.FC = () => {
         documentId: string;
         documentName: string;
     } | null>(null);
+    const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
+    const [previewDocument, setPreviewDocument] = useState<IDocument | null>(
+        null
+    );
 
     const prevIsDialogOpen = useRef<boolean>(false);
     const prevIsDeleteDialogOpen = useRef<boolean>(false);
@@ -126,6 +131,11 @@ const Documents: React.FC = () => {
         }
     };
 
+    const handlePreviewClick = (document: IDocument) => {
+        setPreviewDocument(document);
+        setIsPreviewOpen(true);
+    };
+
     return (
         <DashboardLayout>
             <div className="flex items-center justify-between mb-6">
@@ -176,7 +186,10 @@ const Documents: React.FC = () => {
                                 {formatFileSize(document.fileSize)}
                             </TableCell>
                             <TableCell className="text-right">
-                                <span title="Preview">
+                                <span
+                                    title="Preview"
+                                    onClick={() => handlePreviewClick(document)}
+                                >
                                     <ScanSearch className="inline-block w-5 mr-2 cursor-pointer" />
                                 </span>
                                 <span
@@ -244,6 +257,12 @@ const Documents: React.FC = () => {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
+
+            <PreviewDocument
+                isPreviewOpen={isPreviewOpen}
+                setIsPreviewOpen={setIsPreviewOpen}
+                previewDocument={previewDocument}
+            />
         </DashboardLayout>
     );
 };
