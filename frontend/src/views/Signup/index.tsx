@@ -16,31 +16,36 @@ import EKLINE_AUTH_API from "@/api/auth";
 import { useNavigate, Link } from "react-router-dom";
 import APP_ROUTES from "@/constants/appRoutes";
 
-export const Login: React.FC = () => {
+export const Signup: React.FC = () => {
     const navigate = useNavigate();
     const { user, setUser } = useUser();
 
     const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
-    const defaultLoginData = {
+    const defaultSignupData = {
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
     };
 
-    const [loginData, setLoginData] = useState(defaultLoginData);
+    const [signupData, setSignupData] = useState(defaultSignupData);
 
-    const handleSignIn = async () => {
+    const handleSignUp = async () => {
         setIsProcessing(true);
 
         try {
-            const { data: loginResponse } = await EKLINE_AUTH_API.login(
-                loginData
-            );
+            const { data: signupResponse } = await EKLINE_AUTH_API.register({
+                firstName: signupData.firstName,
+                lastName: signupData.lastName || undefined,
+                email: signupData.email,
+                password: signupData.password,
+            });
 
-            if (loginResponse.status === "success") {
+            if (signupResponse.status === "success") {
                 // TODO: Show success toast
 
-                setUser(loginResponse.data);
+                setUser(signupResponse.data);
 
                 setTimeout(() => {
                     navigate(APP_ROUTES.DOCUMENTS);
@@ -72,53 +77,95 @@ export const Login: React.FC = () => {
                                 <FieldGroup>
                                     <div className="flex flex-col items-center gap-2 text-center">
                                         <h1 className="text-2xl font-bold">
-                                            Welcome back
+                                            Create an account
                                         </h1>
                                         <p className="text-muted-foreground text-balance">
-                                            Login to your Ekline Docs account
+                                            Sign up to get started with Ekline
+                                            Docs
                                         </p>
                                     </div>
                                     <Field>
+                                        <FieldLabel htmlFor="firstName">
+                                            First Name{" "}
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
+                                        </FieldLabel>
+                                        <Input
+                                            id="firstName"
+                                            type="text"
+                                            placeholder="e.g. Deepak"
+                                            required
+                                            className="shadow-none"
+                                            value={signupData.firstName}
+                                            onChange={(e) =>
+                                                setSignupData({
+                                                    ...signupData,
+                                                    firstName: e.target.value,
+                                                })
+                                            }
+                                        />
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel htmlFor="lastName">
+                                            Last Name{" "}
+                                            <span className="text-muted-foreground text-sm font-normal">
+                                                (optional)
+                                            </span>
+                                        </FieldLabel>
+                                        <Input
+                                            id="lastName"
+                                            type="text"
+                                            placeholder="e.g. Priyadarshi"
+                                            className="shadow-none"
+                                            value={signupData.lastName}
+                                            onChange={(e) =>
+                                                setSignupData({
+                                                    ...signupData,
+                                                    lastName: e.target.value,
+                                                })
+                                            }
+                                        />
+                                    </Field>
+                                    <Field>
                                         <FieldLabel htmlFor="email">
-                                            Email
+                                            Email{" "}
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
                                         </FieldLabel>
                                         <Input
                                             id="email"
                                             type="email"
-                                            placeholder="m@example.com"
+                                            placeholder="e.g. deepak@ekline.io"
                                             required
                                             className="shadow-none"
-                                            value={loginData.email}
+                                            value={signupData.email}
                                             onChange={(e) =>
-                                                setLoginData({
-                                                    ...loginData,
+                                                setSignupData({
+                                                    ...signupData,
                                                     email: e.target.value,
                                                 })
                                             }
                                         />
                                     </Field>
                                     <Field>
-                                        <div className="flex items-center">
-                                            <FieldLabel htmlFor="password">
-                                                Password
-                                            </FieldLabel>
-                                            <a
-                                                href="/forgot-password"
-                                                className="ml-auto text-sm underline-offset-2 hover:underline"
-                                            >
-                                                Forgot your password?
-                                            </a>
-                                        </div>
+                                        <FieldLabel htmlFor="password">
+                                            Password
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
+                                        </FieldLabel>
                                         <Input
                                             id="password"
                                             type="password"
                                             required
                                             className="shadow-none"
                                             placeholder="Your password"
-                                            value={loginData.password}
+                                            value={signupData.password}
                                             onChange={(e) =>
-                                                setLoginData({
-                                                    ...loginData,
+                                                setSignupData({
+                                                    ...signupData,
                                                     password: e.target.value,
                                                 })
                                             }
@@ -126,24 +173,26 @@ export const Login: React.FC = () => {
                                     </Field>
                                     <Field>
                                         <Button
-                                            onClick={handleSignIn}
+                                            onClick={handleSignUp}
                                             disabled={
-                                                !loginData.email ||
-                                                !loginData.password ||
+                                                !signupData.firstName ||
+                                                !signupData.email ||
+                                                !signupData.password ||
                                                 isProcessing
                                             }
                                         >
-                                            Login
+                                            Sign Up
                                         </Button>
                                     </Field>
+
                                     <Field className="text-center">
                                         <p className="text-sm text-muted-foreground">
-                                            Don't have an account?{" "}
+                                            Already have an account?{" "}
                                             <Link
-                                                to={APP_ROUTES.SIGNUP}
+                                                to={APP_ROUTES.LOGIN}
                                                 className="text-primary underline-offset-2 hover:underline"
                                             >
-                                                Sign up
+                                                Login
                                             </Link>
                                         </p>
                                     </Field>
