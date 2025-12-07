@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { useNavigate } from "react-router-dom";
 
 import { getUserTokenFromLocalStorage } from "@/lib/utils";
 import EKLINE_AUTH_API from "@/api/auth";
 import APP_ROUTES from "@/constants/appRoutes";
 
 import { IUser } from "./hooks";
-import { useNavigate } from "react-router-dom";
 
 interface IUserStore {
     user: IUser;
@@ -22,10 +22,6 @@ const useUserStore = create<IUserStore>()(
             setUser: (user) => set({ user }),
             clearUser: () => {
                 set({ user: { token: null } as IUser });
-
-                const navigate = useNavigate();
-
-                navigate(APP_ROUTES.LOGIN, { replace: true });
             },
         }),
         {
@@ -36,6 +32,7 @@ const useUserStore = create<IUserStore>()(
 
 const useUser = () => {
     const { user, setUser, clearUser } = useUserStore();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = getUserTokenFromLocalStorage();
@@ -61,6 +58,7 @@ const useUser = () => {
                 console.log("Error fetching user session:", error);
 
                 clearUser();
+                navigate(APP_ROUTES.LOGIN, { replace: true });
             }
         };
 
