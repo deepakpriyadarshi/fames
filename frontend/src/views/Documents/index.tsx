@@ -10,62 +10,41 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { IDocument } from "./documents";
 import EKLINE_DOCUMENT_API from "@/api/document";
-import { FileUp, ScanSearch, SquareArrowOutUpRight } from "lucide-react";
+import {
+    FileUp,
+    ScanSearch,
+    SquareArrowOutUpRight,
+    Trash2,
+} from "lucide-react";
 import { formatFileSize, formatFileType } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import NewDocument from "./NewDocument";
+import { toast } from "sonner";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
 
 const Documents: React.FC = () => {
-    const invoices = [
-        {
-            document: "INV001",
-            paymentStatus: "Paid",
-            totalAmount: "$250.00",
-            paymentMethod: "Credit Card",
-        },
-        {
-            document: "INV002",
-            paymentStatus: "Pending",
-            totalAmount: "$150.00",
-            paymentMethod: "PayPal",
-        },
-        {
-            document: "INV003",
-            paymentStatus: "Unpaid",
-            totalAmount: "$350.00",
-            paymentMethod: "Bank Transfer",
-        },
-        {
-            document: "INV004",
-            paymentStatus: "Paid",
-            totalAmount: "$450.00",
-            paymentMethod: "Credit Card",
-        },
-        {
-            document: "INV005",
-            paymentStatus: "Paid",
-            totalAmount: "$550.00",
-            paymentMethod: "PayPal",
-        },
-        {
-            document: "INV006",
-            paymentStatus: "Pending",
-            totalAmount: "$200.00",
-            paymentMethod: "Bank Transfer",
-        },
-        {
-            document: "INV007",
-            paymentStatus: "Unpaid",
-            totalAmount: "$300.00",
-            paymentMethod: "Credit Card",
-        },
-    ];
-
     const [documents, setDocuments] = useState<IDocument[]>([]);
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] =
+        useState<boolean>(false);
+    const [documentToDelete, setDocumentToDelete] = useState<{
+        documentId: string;
+        documentName: string;
+    } | null>(null);
+
+    const prevIsDialogOpen = useRef<boolean>(false);
+    const prevIsDeleteDialogOpen = useRef<boolean>(false);
 
     useEffect(() => {
         const fetchDocuments = async () => {
@@ -82,7 +61,70 @@ const Documents: React.FC = () => {
         };
 
         fetchDocuments();
-    }, [isDialogOpen]);
+    }, []);
+
+    useEffect(() => {
+        const newDocumentDialogClosed =
+            prevIsDialogOpen.current && !isDialogOpen;
+        const deleteDialogClosed =
+            prevIsDeleteDialogOpen.current && !isDeleteDialogOpen;
+
+        if (newDocumentDialogClosed || deleteDialogClosed) {
+            const fetchDocuments = async () => {
+                try {
+                    const { data: documentsResponse } =
+                        await EKLINE_DOCUMENT_API.getDocuments();
+
+                    if (documentsResponse.status === "success") {
+                        setDocuments(documentsResponse.data);
+                    }
+                } catch (error) {
+                    console.error("Error fetching documents:", error);
+                }
+            };
+
+            fetchDocuments();
+        }
+
+        prevIsDialogOpen.current = isDialogOpen;
+        prevIsDeleteDialogOpen.current = isDeleteDialogOpen;
+    }, [isDialogOpen, isDeleteDialogOpen]);
+
+    const handleDeleteClick = (documentId: string, documentName: string) => {
+        setDocumentToDelete({ documentId, documentName });
+        setIsDeleteDialogOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!documentToDelete) return;
+
+        try {
+            const { data: deleteResponse } =
+                await EKLINE_DOCUMENT_API.deleteDocument({
+                    documentId: documentToDelete.documentId,
+                });
+
+            if (deleteResponse.status === "success") {
+                toast.success("Document deleted successfully", {
+                    duration: 3000,
+                    position: "bottom-center",
+                });
+
+                setIsDeleteDialogOpen(false);
+                setDocumentToDelete(null);
+            }
+        } catch (error: any) {
+            console.error("Error deleting document:", error);
+
+            const message =
+                error?.response?.data?.message || "Something went wrong";
+
+            toast.error(message, {
+                duration: 3000,
+                position: "top-center",
+            });
+        }
+    };
 
     return (
         <DashboardLayout>
@@ -148,6 +190,17 @@ const Documents: React.FC = () => {
                                 >
                                     <SquareArrowOutUpRight className="inline-block w-5 ml-2 cursor-pointer" />
                                 </span>
+                                <span
+                                    title="Delete Document"
+                                    onClick={() =>
+                                        handleDeleteClick(
+                                            document.documentId,
+                                            document.name
+                                        )
+                                    }
+                                >
+                                    <Trash2 className="inline-block w-5 ml-2 cursor-pointer text-red-500 hover:text-red-700" />
+                                </span>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -158,6 +211,39 @@ const Documents: React.FC = () => {
                 isDialogOpen={isDialogOpen}
                 setIsDialogOpen={setIsDialogOpen}
             />
+
+            <Dialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+            >
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Delete Document</DialogTitle>
+                        <DialogDescription>
+                            <div className="text-center py-10 text-lg">
+                                Are you sure you want to delete?
+                                <br />
+                                <span className="font-bold">
+                                    {documentToDelete?.documentName}
+                                </span>
+                                <br />
+                                This action cannot be undone.
+                            </div>
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button
+                            variant="destructive"
+                            onClick={handleConfirmDelete}
+                        >
+                            Delete
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </DashboardLayout>
     );
 };
