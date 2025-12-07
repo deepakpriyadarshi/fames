@@ -27,10 +27,20 @@ import {
 } from "@/components/ui/sidebar";
 import useUser from "@/hooks/useUser";
 import { getUserInitials } from "@/lib/utils";
+import { toast } from "sonner";
 
 const NavUser = ({}) => {
     const { isMobile } = useSidebar();
     const { user, clearUser } = useUser();
+
+    const handleLogout = () => {
+        toast.success("Logged out successfully", {
+            duration: 3000,
+            position: "bottom-center",
+        });
+
+        clearUser();
+    };
 
     return (
         <SidebarMenu>
@@ -127,7 +137,7 @@ const NavUser = ({}) => {
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={clearUser}>
+                        <DropdownMenuItem onClick={handleLogout}>
                             <LogOut />
                             Log out
                         </DropdownMenuItem>

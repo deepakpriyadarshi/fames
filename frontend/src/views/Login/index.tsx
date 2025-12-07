@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+
+import { toast } from "sonner";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -38,7 +41,10 @@ export const Login: React.FC = () => {
             );
 
             if (loginResponse.status === "success") {
-                // TODO: Show success toast
+                toast.success("Authenticated !! Redirecting to documents", {
+                    duration: 3000,
+                    position: "bottom-center",
+                });
 
                 setUser(loginResponse.data);
 
@@ -50,17 +56,20 @@ export const Login: React.FC = () => {
             const message =
                 error?.response?.data?.message || "Something went wrong";
 
-            // TODO: Show error toast with message
+            toast.error(message, {
+                duration: 3000,
+                position: "bottom-center",
+            });
         } finally {
             setIsProcessing(false);
         }
     };
 
-    useEffect(() => {
-        if (user?.token) {
-            navigate(APP_ROUTES.DOCUMENTS);
-        }
-    }, [user]);
+    // useEffect(() => {
+    //     if (user?.token) {
+    //         navigate(APP_ROUTES.DOCUMENTS);
+    //     }
+    // }, [user]);
 
     return (
         <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">

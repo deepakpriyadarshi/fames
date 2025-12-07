@@ -15,6 +15,7 @@ import useUser from "@/hooks/useUser";
 import EKLINE_AUTH_API from "@/api/auth";
 import { useNavigate, Link } from "react-router-dom";
 import APP_ROUTES from "@/constants/appRoutes";
+import { toast } from "sonner";
 
 export const Signup: React.FC = () => {
     const navigate = useNavigate();
@@ -43,7 +44,10 @@ export const Signup: React.FC = () => {
             });
 
             if (signupResponse.status === "success") {
-                // TODO: Show success toast
+                toast.success("Account created successfully", {
+                    duration: 3000,
+                    position: "bottom-center",
+                });
 
                 setUser(signupResponse.data);
 
@@ -55,17 +59,20 @@ export const Signup: React.FC = () => {
             const message =
                 error?.response?.data?.message || "Something went wrong";
 
-            // TODO: Show error toast with message
+            toast.error(message, {
+                duration: 3000,
+                position: "bottom-center",
+            });
         } finally {
             setIsProcessing(false);
         }
     };
 
-    useEffect(() => {
-        if (user?.token) {
-            navigate(APP_ROUTES.DOCUMENTS);
-        }
-    }, [user]);
+    // useEffect(() => {
+    //     if (user?.token) {
+    //         navigate(APP_ROUTES.DOCUMENTS);
+    //     }
+    // }, [user]);
 
     return (
         <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">

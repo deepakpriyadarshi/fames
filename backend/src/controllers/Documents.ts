@@ -26,7 +26,7 @@ const DocumentsController: IDocumentsController = {
             if (!["text/plain"].includes(file.mimetype)) {
                 return res.status(400).json({
                     status: "error",
-                    message: "File Type: " + file.mimetype + " Not Allowed For",
+                    message: "File Type: " + file.mimetype + " Not Allowed",
                     allowedFileTypes: ["text/plain"],
                 });
             }

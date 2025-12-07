@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface NewDocumentProps {
     isDialogOpen: boolean;
@@ -41,11 +42,22 @@ const NewDocument: React.FC<NewDocumentProps> = ({
             if (documentsResponse?.data?.status === "success") {
                 setIsDialogOpen(false);
                 setNewDocumentData({ name: "", file: null });
-            }
 
-            console.log("Document uploaded successfully:", documentsResponse);
-        } catch (error) {
+                toast.success("Document uploaded successfully", {
+                    duration: 3000,
+                    position: "bottom-center",
+                });
+            }
+        } catch (error: any) {
             console.log("Error uploading document:", error);
+
+            const message =
+                error?.response?.data?.message || "Something went wrong";
+
+            toast.error(message, {
+                duration: 3000,
+                position: "top-center",
+            });
         }
     };
 

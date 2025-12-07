@@ -7,6 +7,7 @@ import EKLINE_AUTH_API from "@/api/auth";
 import APP_ROUTES from "@/constants/appRoutes";
 
 import { IUser } from "./hooks";
+import { useNavigate } from "react-router-dom";
 
 interface IUserStore {
     user: IUser;
@@ -22,7 +23,9 @@ const useUserStore = create<IUserStore>()(
             clearUser: () => {
                 set({ user: { token: null } as IUser });
 
-                window.location.replace(APP_ROUTES.LOGIN);
+                const navigate = useNavigate();
+
+                navigate(APP_ROUTES.LOGIN, { replace: true });
             },
         }),
         {
