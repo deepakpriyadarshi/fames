@@ -1,5 +1,5 @@
 const API_ROUTES = {
-    BASE_URL: "http://localhost:4000/v1",
+    BASE_URL: import.meta.env.VITE_API_URL + "/v1",
 
     REGISTER: "/auth/register",
     LOGIN: "/auth/login",
