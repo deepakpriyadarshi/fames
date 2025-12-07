@@ -52,6 +52,38 @@ const DeleteDocument: React.FC<DeleteDocumentProps> = ({
                 duration: 3000,
                 position: "top-center",
             });
+            <Dialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+            >
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Delete Document</DialogTitle>
+                        <DialogDescription>
+                            <div className="text-center py-10 text-lg">
+                                Are you sure you want to delete?
+                                <br />
+                                <span className="font-bold">
+                                    {documentToDelete?.documentName}
+                                </span>
+                                <br />
+                                This action cannot be undone.
+                            </div>
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button
+                            variant="destructive"
+                            onClick={handleConfirmDelete}
+                        >
+                            Delete
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>;
         }
     };
 
