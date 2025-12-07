@@ -92,15 +92,39 @@ const NewDocument: React.FC<NewDocumentProps> = ({
                         </Label>
                         <Input
                             type="file"
+                            accept=".txt"
                             placeholder=""
-                            onChange={(e) =>
+                            onChange={(e) => {
+                                const selectedFile = e.target.files
+                                    ? e.target.files[0]
+                                    : null;
+
+                                if (selectedFile) {
+                                    const fileName = selectedFile.name;
+                                    const fileExtension = fileName
+                                        .split(".")
+                                        .pop()
+                                        ?.toLowerCase();
+
+                                    if (fileExtension !== "txt") {
+                                        toast.error(
+                                            "Only .txt files are allowed",
+                                            {
+                                                duration: 3000,
+                                                position: "top-center",
+                                            }
+                                        );
+
+                                        e.target.value = "";
+                                        return;
+                                    }
+                                }
+
                                 setNewDocumentData((prev) => ({
                                     ...prev,
-                                    file: e.target.files
-                                        ? e.target.files[0]
-                                        : null,
-                                }))
-                            }
+                                    file: selectedFile,
+                                }));
+                            }}
                         />
                     </div>
                 </div>
