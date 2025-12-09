@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const getUserTokenFromLocalStorage = () => {
     try {
-        let userData = localStorage.getItem("ekline-user") as any;
+        let userData = localStorage.getItem("ablecredit-user") as any;
 
         if (userData) {
             userData = JSON.parse(userData);

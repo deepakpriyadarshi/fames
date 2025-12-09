@@ -9,7 +9,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import EKLINE_DOCUMENT_API from "@/api/document";
+import ABLECREDIT_DOCUMENT_API from "@/api/document";
 
 interface DeleteDocumentProps {
     isDeleteDialogOpen: boolean;
@@ -30,7 +30,7 @@ const DeleteDocument: React.FC<DeleteDocumentProps> = ({
 
         try {
             const { data: deleteResponse } =
-                await EKLINE_DOCUMENT_API.deleteDocument({
+                await ABLECREDIT_DOCUMENT_API.deleteDocument({
                     documentId: documentToDelete.documentId,
                 });
 

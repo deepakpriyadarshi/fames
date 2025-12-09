@@ -13,7 +13,10 @@ const isDocker =
     fs.existsSync("/.dockerenv") || process.env.DOCKER_CONTAINER === "true";
 
 let dbHost = config.DB_HOST;
-if (!isDocker && (dbHost === "ekline-db" || dbHost.includes("ekline-db"))) {
+if (
+    !isDocker &&
+    (dbHost === "ablecredit-db" || dbHost.includes("ablecredit-db"))
+) {
     dbHost = "localhost";
     console.log(
         `Running outside Docker, using localhost instead of ${config.DB_HOST}`

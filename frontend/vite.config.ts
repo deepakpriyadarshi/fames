@@ -7,7 +7,7 @@ export default defineConfig({
     server: {
         port: 3000,
         host: "0.0.0.0",
-        allowedHosts: ["ekline.deepakpriyadarshi.com", "localhost"],
+        allowedHosts: ["ablecredit.deepakpriyadarshi.com", "localhost"],
     },
     resolve: {
         alias: {

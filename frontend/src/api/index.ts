@@ -3,16 +3,16 @@ import axios from "axios";
 import API_ROUTES from "@/constants/apiRoutes";
 import { getUserTokenFromLocalStorage } from "@/lib/utils";
 
-const EKLINE_API = axios.create({
+const ABLECREDIT_API = axios.create({
     baseURL: `${API_ROUTES.BASE_URL}`,
 });
 
-const EKLINE_PUBLIC_API = axios.create({
+const ABLECREDIT_PUBLIC_API = axios.create({
     baseURL: `${API_ROUTES.BASE_URL}`,
 });
 
 /* Add Authorization header to all requests */
-EKLINE_API.interceptors.request.use((config) => {
+ABLECREDIT_API.interceptors.request.use((config) => {
     const token = getUserTokenFromLocalStorage();
 
     if (!token) {
@@ -24,4 +24,4 @@ EKLINE_API.interceptors.request.use((config) => {
     return config;
 });
 
-export { EKLINE_API as default, EKLINE_PUBLIC_API };
+export { ABLECREDIT_API as default, ABLECREDIT_PUBLIC_API };

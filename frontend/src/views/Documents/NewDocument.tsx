@@ -1,4 +1,4 @@
-import EKLINE_DOCUMENT_API from "@/api/document";
+import ABLECREDIT_DOCUMENT_API from "@/api/document";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -34,7 +34,7 @@ const NewDocument: React.FC<NewDocumentProps> = ({
 
     const handleDocumentUpload = async () => {
         try {
-            const documentsResponse = await EKLINE_DOCUMENT_API.create({
+            const documentsResponse = await ABLECREDIT_DOCUMENT_API.create({
                 name: newDocumentData.name,
                 file: newDocumentData.file as File,
             });

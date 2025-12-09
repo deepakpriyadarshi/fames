@@ -37,7 +37,7 @@ const DocumentsController: IDocumentsController = {
                 Date.now() +
                 "-" +
                 file.originalname.replace(/ /g, "-");
-            const filePath = `ekline/documents`;
+            const filePath = `ablecredit/documents`;
 
             const uploadParams = {
                 Body: file.buffer,

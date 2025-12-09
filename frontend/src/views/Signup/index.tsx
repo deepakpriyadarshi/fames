@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import ASSETS_IMAGES from "@/constants/assets";
 import useUser from "@/hooks/useUser";
-import EKLINE_AUTH_API from "@/api/auth";
+import ABLECREDIT_AUTH_API from "@/api/auth";
 import { useNavigate, Link } from "react-router-dom";
 import APP_ROUTES from "@/constants/appRoutes";
 import { toast } from "sonner";
@@ -36,12 +36,14 @@ export const Signup: React.FC = () => {
         setIsProcessing(true);
 
         try {
-            const { data: signupResponse } = await EKLINE_AUTH_API.register({
-                firstName: signupData.firstName,
-                lastName: signupData.lastName || undefined,
-                email: signupData.email,
-                password: signupData.password,
-            });
+            const { data: signupResponse } = await ABLECREDIT_AUTH_API.register(
+                {
+                    firstName: signupData.firstName,
+                    lastName: signupData.lastName || undefined,
+                    email: signupData.email,
+                    password: signupData.password,
+                }
+            );
 
             if (signupResponse.status === "success") {
                 toast.success("Account created successfully", {
@@ -87,8 +89,8 @@ export const Signup: React.FC = () => {
                                             Create an account
                                         </h1>
                                         <p className="text-muted-foreground text-balance">
-                                            Sign up to get started with Ekline
-                                            Docs
+                                            Sign up to get started with
+                                            AbleCredit Docs
                                         </p>
                                     </div>
                                     <Field>
@@ -144,7 +146,7 @@ export const Signup: React.FC = () => {
                                         <Input
                                             id="email"
                                             type="email"
-                                            placeholder="e.g. deepak@ekline.io"
+                                            placeholder="e.g. deepak@ablecredit.io"
                                             required
                                             className="shadow-none"
                                             value={signupData.email}
@@ -217,14 +219,14 @@ export const Signup: React.FC = () => {
                     <FieldDescription className="px-6 text-center">
                         By clicking continue, you agree to our{" "}
                         <a
-                            href="https://ekline.io/terms-of-service"
+                            href="https://www.ablecredit.com/legal/terms/"
                             target="_blank"
                         >
                             Terms of Service
                         </a>{" "}
                         and{" "}
                         <a
-                            href="https://ekline.io/privacy-policy"
+                            href="https://www.ablecredit.com/legal/privacy/"
                             target="_blank"
                         >
                             Privacy Policy

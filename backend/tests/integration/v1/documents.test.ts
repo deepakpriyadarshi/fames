@@ -86,7 +86,7 @@ describe("Documents API Integration Tests", () => {
         name: "test-document.txt",
         originalName: "Test Document.txt",
         userId: testUserId,
-        filePath: "ekline/documents/test-document.txt",
+        filePath: "ablecredit/documents/test-document.txt",
         fileSize: 1024,
         mimeType: "text/plain",
         createdAt: new Date(),

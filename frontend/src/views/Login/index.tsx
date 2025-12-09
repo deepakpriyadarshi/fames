@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import ASSETS_IMAGES from "@/constants/assets";
 import useUser from "@/hooks/useUser";
-import EKLINE_AUTH_API from "@/api/auth";
+import ABLECREDIT_AUTH_API from "@/api/auth";
 import { useNavigate, Link } from "react-router-dom";
 import APP_ROUTES from "@/constants/appRoutes";
 
@@ -36,7 +36,7 @@ export const Login: React.FC = () => {
         setIsProcessing(true);
 
         try {
-            const { data: loginResponse } = await EKLINE_AUTH_API.login(
+            const { data: loginResponse } = await ABLECREDIT_AUTH_API.login(
                 loginData
             );
 
@@ -84,7 +84,8 @@ export const Login: React.FC = () => {
                                             Welcome back
                                         </h1>
                                         <p className="text-muted-foreground text-balance">
-                                            Login to your Ekline Docs account
+                                            Login to your AbleCredit Docs
+                                            account
                                         </p>
                                     </div>
                                     <Field>
@@ -170,14 +171,14 @@ export const Login: React.FC = () => {
                     <FieldDescription className="px-6 text-center">
                         By clicking continue, you agree to our{" "}
                         <a
-                            href="https://ekline.io/terms-of-service"
+                            href="https://www.ablecredit.com/legal/terms/"
                             target="_blank"
                         >
                             Terms of Service
                         </a>{" "}
                         and{" "}
                         <a
-                            href="https://ekline.io/privacy-policy"
+                            href="https://www.ablecredit.com/legal/privacy/"
                             target="_blank"
                         >
                             Privacy Policy

@@ -11,7 +11,7 @@ app.use(express.json());
 app.use("/v1", v1Router);
 
 app.get("/health", (_req, res) => {
-    res.json({ status: "ok", service: "ekline-backend" });
+    res.json({ status: "ok", service: "ablecredit-backend" });
 });
 
 export { app };

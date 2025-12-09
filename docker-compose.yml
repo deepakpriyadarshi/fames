@@ -1,87 +1,87 @@
 services:
-    ekline-migrations:
+    ablecredit-migrations:
         build:
             context: ./backend
             dockerfile: Dockerfile
-        container_name: ekline-migrations
+        container_name: ablecredit-migrations
         env_file:
             - ./backend/.env
         command: sh -c "node scripts/wait-for-db.js && npm run migrate:up"
         depends_on:
-            ekline-db:
+            ablecredit-db:
                 condition: service_healthy
         networks:
-            - ekline-network
+            - ablecredit-network
         volumes:
             - ./backend:/app
             - /app/node_modules
         restart: "no"
 
-    ekline-backend:
+    ablecredit-backend:
         build:
             context: ./backend
             dockerfile: Dockerfile
-        container_name: ekline-backend
+        container_name: ablecredit-backend
         env_file:
             - ./backend/.env
         ports:
             - "4000:4000"
         depends_on:
-            - ekline-db
-            - ekline-redis
-            - ekline-migrations
+            - ablecredit-db
+            - ablecredit-redis
+            - ablecredit-migrations
         networks:
-            - ekline-network
+            - ablecredit-network
         volumes:
             - ./backend:/app
             - /app/node_modules
 
-    ekline-frontend:
+    ablecredit-frontend:
         build:
             context: ./frontend
             dockerfile: Dockerfile
-        container_name: ekline-frontend
+        container_name: ablecredit-frontend
         env_file:
             - ./frontend/.env
         ports:
             - "3000:3000"
         depends_on:
-            - ekline-backend
+            - ablecredit-backend
         networks:
-            - ekline-network
+            - ablecredit-network
         volumes:
             - ./frontend:/app
             - /app/node_modules
 
-    ekline-db:
+    ablecredit-db:
         image: postgres:16-alpine
-        container_name: ekline-db
+        container_name: ablecredit-db
         restart: unless-stopped
         env_file:
             - ./backend/.env
         ports:
             - "5432:5432"
         volumes:
-            - ekline_postgres_data:/var/lib/postgresql/data
+            - ablecredit_postgres_data:/var/lib/postgresql/data
         networks:
-            - ekline-network
+            - ablecredit-network
         healthcheck:
             test: ["CMD-SHELL", "pgrep postgres || exit 1"]
             interval: 5s
             timeout: 5s
             retries: 5
 
-    ekline-redis:
+    ablecredit-redis:
         image: redis:7-alpine
-        container_name: ekline-redis
+        container_name: ablecredit-redis
         restart: unless-stopped
         ports:
             - "6379:6379"
         networks:
-            - ekline-network
+            - ablecredit-network
 
 networks:
-    ekline-network:
+    ablecredit-network:
 
 volumes:
-    ekline_postgres_data:
+    ablecredit_postgres_data:

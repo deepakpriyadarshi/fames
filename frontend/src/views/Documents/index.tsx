@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import { useEffect, useState, useRef } from "react";
 import { IDocument } from "./documents";
-import EKLINE_DOCUMENT_API from "@/api/document";
+import ABLECREDIT_DOCUMENT_API from "@/api/document";
 import {
     FileUp,
     ScanSearch,
@@ -46,7 +46,7 @@ const Documents: React.FC = () => {
         const fetchDocuments = async () => {
             try {
                 const { data: documentsResponse } =
-                    await EKLINE_DOCUMENT_API.getDocuments();
+                    await ABLECREDIT_DOCUMENT_API.getDocuments();
 
                 if (documentsResponse.status === "success") {
                     setDocuments(documentsResponse.data);
@@ -69,7 +69,7 @@ const Documents: React.FC = () => {
             const fetchDocuments = async () => {
                 try {
                     const { data: documentsResponse } =
-                        await EKLINE_DOCUMENT_API.getDocuments();
+                        await ABLECREDIT_DOCUMENT_API.getDocuments();
 
                     if (documentsResponse.status === "success") {
                         setDocuments(documentsResponse.data);

@@ -2,7 +2,7 @@ const { execSync } = require("child_process");
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const host = process.env.DB_HOST || "ekline-db";
+const host = process.env.DB_HOST || "ablecredit-db";
 const port = process.env.DB_PORT || "5432";
 const user = process.env.POSTGRES_USER || process.env.DB_USER || "postgres";
 

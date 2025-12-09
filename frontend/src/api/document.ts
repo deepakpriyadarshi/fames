@@ -1,4 +1,4 @@
-import EKLINE_API, { EKLINE_PUBLIC_API } from "@/api/index";
+import ABLECREDIT_API, { ABLECREDIT_PUBLIC_API } from "@/api/index";
 
 import API_ROUTES from "@/constants/apiRoutes";
 
@@ -30,32 +30,38 @@ const create = async (params: ICreateDocumentParams) => {
     formData.append("file", file);
     formData.append("name", name);
 
-    return EKLINE_API.post(API_ROUTES.CREATE_DOCUMENT, formData);
+    return ABLECREDIT_API.post(API_ROUTES.CREATE_DOCUMENT, formData);
 };
 
 const getDocuments = async () => {
-    return EKLINE_API.get(API_ROUTES.GET_DOCUMENTS, {});
+    return ABLECREDIT_API.get(API_ROUTES.GET_DOCUMENTS, {});
 };
 
 const getDocumentDetails = async (params: IGetDocumentDetailsParams) => {
     const { documentId } = params;
 
-    return EKLINE_API.get(`${API_ROUTES.GET_DOCUMENT_DETAILS(documentId)}`, {});
+    return ABLECREDIT_API.get(
+        `${API_ROUTES.GET_DOCUMENT_DETAILS(documentId)}`,
+        {}
+    );
 };
 
 const updateDocument = async (params: IUpdateDocumentParams) => {
     const { documentId, data } = params;
 
-    return EKLINE_API.put(`${API_ROUTES.UPDATE_DOCUMENT(documentId)}`, data);
+    return ABLECREDIT_API.put(
+        `${API_ROUTES.UPDATE_DOCUMENT(documentId)}`,
+        data
+    );
 };
 
 const deleteDocument = async (params: IDeleteDocumentParams) => {
     const { documentId } = params;
 
-    return EKLINE_API.delete(`${API_ROUTES.DELETE_DOCUMENT(documentId)}`);
+    return ABLECREDIT_API.delete(`${API_ROUTES.DELETE_DOCUMENT(documentId)}`);
 };
 
-const EKLINE_DOCUMENT_API = {
+const ABLECREDIT_DOCUMENT_API = {
     create,
     getDocuments,
     getDocumentDetails,
@@ -63,4 +69,4 @@ const EKLINE_DOCUMENT_API = {
     deleteDocument,
 };
 
-export default EKLINE_DOCUMENT_API;
+export default ABLECREDIT_DOCUMENT_API;

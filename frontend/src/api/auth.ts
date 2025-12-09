@@ -1,4 +1,4 @@
-import EKLINE_API, { EKLINE_PUBLIC_API } from "@/api/index";
+import ABLECREDIT_API, { ABLECREDIT_PUBLIC_API } from "@/api/index";
 
 import API_ROUTES from "@/constants/apiRoutes";
 
@@ -15,25 +15,25 @@ interface ILoginParams {
 }
 
 const register = async (params: IRegisterParams) => {
-    return EKLINE_PUBLIC_API.post(API_ROUTES.REGISTER, {
+    return ABLECREDIT_PUBLIC_API.post(API_ROUTES.REGISTER, {
         ...params,
     });
 };
 
 const login = async (params: ILoginParams) => {
-    return EKLINE_PUBLIC_API.post(API_ROUTES.LOGIN, {
+    return ABLECREDIT_PUBLIC_API.post(API_ROUTES.LOGIN, {
         ...params,
     });
 };
 
 const getSession = async () => {
-    return EKLINE_API.get(API_ROUTES.SESSION, {});
+    return ABLECREDIT_API.get(API_ROUTES.SESSION, {});
 };
 
-const EKLINE_AUTH_API = {
+const ABLECREDIT_AUTH_API = {
     register,
     login,
     getSession,
 };
 
-export default EKLINE_AUTH_API;
+export default ABLECREDIT_AUTH_API;

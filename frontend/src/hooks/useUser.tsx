@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 import { useNavigate } from "react-router-dom";
 
 import { getUserTokenFromLocalStorage } from "@/lib/utils";
-import EKLINE_AUTH_API from "@/api/auth";
+import ABLECREDIT_AUTH_API from "@/api/auth";
 import APP_ROUTES from "@/constants/appRoutes";
 
 import { IUser } from "./hooks";
@@ -25,7 +25,7 @@ const useUserStore = create<IUserStore>()(
             },
         }),
         {
-            name: "ekline-user",
+            name: "ablecredit-user",
         }
     )
 );
@@ -44,7 +44,7 @@ const useUser = () => {
 
             try {
                 const { data: mySessionResponse } =
-                    await EKLINE_AUTH_API.getSession();
+                    await ABLECREDIT_AUTH_API.getSession();
 
                 if (mySessionResponse.status === "success") {
                     const userData = {
