@@ -25,7 +25,7 @@ services:
         env_file:
             - ./backend/.env
         ports:
-            - "4000:4000"
+            - "6000:6000"
         depends_on:
             - ablecredit-db
             - ablecredit-redis
@@ -44,7 +44,7 @@ services:
         env_file:
             - ./frontend/.env
         ports:
-            - "3000:3000"
+            - "5000:5000"
         depends_on:
             - ablecredit-backend
         networks:
@@ -60,7 +60,7 @@ services:
         env_file:
             - ./backend/.env
         ports:
-            - "5432:5432"
+            - "5433:5432"
         volumes:
             - ablecredit_postgres_data:/var/lib/postgresql/data
         networks:
@@ -76,7 +76,7 @@ services:
         container_name: ablecredit-redis
         restart: unless-stopped
         ports:
-            - "6379:6379"
+            - "6380:6379"
         networks:
             - ablecredit-network
 
